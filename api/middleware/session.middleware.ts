@@ -16,7 +16,7 @@ export class SessionMiddleware {
     }
 
     isValidSession(req: any, res: any, next: any): void {
-        this.authApplication.verify(req.cookies[this.sessionConfiguration.tokenCookieName])
+        this.authApplication.verify(req.cookies[this.sessionConfiguration.tokenStoreKey])
         .then(payload => {
             req.user = payload;
             next();

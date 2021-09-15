@@ -1,3 +1,4 @@
 export interface SessionConfiguration {
-    tokenCookieName: string;
+    tokenStoreKey: string;
+    sessionDurationInSeconds: number;
 }

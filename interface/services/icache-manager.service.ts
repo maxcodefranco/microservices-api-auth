@@ -1,4 +1,5 @@
 export interface ICacheManagerService {
-    set<T>(key: string, data: T, expiresAt?: number): void;
-    get<T>(key: string): T;
+    set(key: string, data: string, expiresAt?: number): Promise<boolean>;
+    get(key: string): Promise<string>;
+    remove(key: string): Promise<boolean>;
 }

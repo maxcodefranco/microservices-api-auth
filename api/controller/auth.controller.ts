@@ -6,9 +6,6 @@ import { BaseController } from "./base.controller";
 
 @injectable()
 export class AuthController extends BaseController {
-
-    static headerToken: string = "x-auth-token";
-
     constructor(
         @inject("IAuthApplication")
         private authApplication: IAuthApplication,
@@ -19,13 +16,21 @@ export class AuthController extends BaseController {
      super();   
     }
 
-    signinByCredentials(req: any, res: any) {
-        const token = this.authApplication.signinByCredentials("maxcodefranco@gmail.com", "123456", "jdisfniwsdgf");
-        res.cookie(this.sessionConfiguration.tokenCookieName, token);
+    async signinByCredentials(req: any, res: any) {
+        const token = await this.authApplication.signinByCredentials("maxcodefranco@gmail.com", "123456", "jdisfniwsdgf");
+        res.cookie(this.sessionConfiguration.tokenStoreKey, token);
         res.json({
             status: "Max ok",
             token
         });
+    }
+
+    signout(req: any, res: any) {
+
+    }
+
+    refreshToken(req: any, res: any) {
+
     }
 
     verify(req: any, res: any) {
