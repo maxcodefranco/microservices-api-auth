@@ -1,19 +1,28 @@
-import { injectable } from "tsyringe";
-import { AuthController } from "../controller/auth.controller";
-import jwt from 'jsonwebtoken'
-import { SessionPayloadModel } from "../../model/auth/session-payload.model";
+import { inject, injectable } from "tsyringe";
+import { IAuthApplication } from "../../interface/application/auth/iauth.application";
+import { SessionConfiguration } from "../../model/configuration/session.configuration";
 
 @injectable()
 export class SessionMiddleware {
 
-    validSession(req: any, res: any, next: any): void {
-        var token = req.cookies[AuthController.headerToken];
-        if (!token) return next("Não autenticado");
+    constructor(
+        @inject("IAuthApplication")
+        private authApplication: IAuthApplication,
 
-        jwt.verify(token, '123456', (err: any, decoded: any) => {
-            if (err) return next(err);
-            req.user = decoded;
+        @inject("SessionConfiguration")
+        private sessionConfiguration: SessionConfiguration
+    ) {
+
+    }
+
+    isValidSession(req: any, res: any, next: any): void {
+        this.authApplication.verify(req.cookies[this.sessionConfiguration.tokenCookieName])
+        .then(payload => {
+            req.user = payload;
             next();
+        })
+        .catch(err => {
+           next(err); 
         });
     }
 

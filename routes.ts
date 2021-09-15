@@ -35,7 +35,7 @@ export class Routes implements IRoutes {
     auth(): any {
         const app = express();
         app.use('/signin', this.authController.signinByCredentials.bind(this.authController));
-        app.use('/status', this.sessionMiddleware.validSession.bind(this.sessionMiddleware), this.authController.status.bind(this.authController));
+        app.use('/status', this.sessionMiddleware.isValidSession.bind(this.sessionMiddleware), this.authController.status.bind(this.authController));
         // app.use('/oauth');
         return app;
     }
